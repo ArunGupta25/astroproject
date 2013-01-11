@@ -50,20 +50,23 @@ ng_dtype = ([('name', str, 25),
 				('references', str, 40)
 				])
 
+#master array of data
 ngdata = numpy.loadtxt('nearbygalaxies1.dat', dtype=ng_dtype)
 
 #initialize arrays for xyz coordinates and labels
 xyz = numpy.empty((26,3))
 names = []
 
-#populate the arrays
+#populate the arrays with xyz coordinates
 for i in range(0,26):
 
+	#first transform each to galactic coordinates
 	b = galactic.galactic(ngdata[i][1],ngdata[i][2])[0]
 	bradians = b / 180 * math.pi
 	l = galactic.galactic(ngdata[i][1],ngdata[i][2])[1]
 	lradians = l / 180 * math.pi
 
+	#calculate the distance to the object
 	distance = math.pow(10, ((ngdata[i][4] + 5) / 5))
 
 	help = distance * math.cos(bradians)
@@ -78,32 +81,18 @@ for i in range(0,26):
 	xyz[i][1] = y
 	xyz[i][2] = z
 
-	print ngdata[i][0]
+	#add in the object names
+	#print ngdata[i][0]
 	names.append(ngdata[i][0])
-"""
-#complicated stuff to add in the milkyway
-mwb = galactic.galactic(ngdata[0][1],ngdata[0][2])[0]
-mwbradians = mwb / 180 * math.pi
-mwl = galactic.galactic(ngdata[0][1],ngdata[0][2])[1]
-mwlradians = mwl / 180 * math.pi
-mwdistance = math.pow(10, ((ngdata[0][4] + 5) / 5))
-mwhelp = mwdistance * math.cos(mwbradians)
-mwy = mwhelp * math.sin(mwlradians)
-mwx = mwhelp * math.cos(mwlradians)
-mwz = mwdistance * math.sin(mwbradians)
-"""
 
+#break out the arrays
 fname = names
-#fname = numpy.insert(fname, 0, 'The Galaxy')
 
 fx = numpy.ravel(xyz[:,0])
-#fx = numpy.insert(fx, 0, mwx)
 
 fy = numpy.ravel(xyz[:,1])
-#fy = numpy.insert(fy, 0, mwy)
 
 fz = numpy.ravel(xyz[:,2])
-#fz = numpy.insert(fz, 0, mwz)
 
 """
 #plot the xyz coordinates
@@ -117,4 +106,5 @@ ax.scatter3D(numpy.ravel(xyz[:,0]), numpy.ravel(xyz[:,1]), numpy.ravel(xyz[:,2])
 p.show()
 """
 
+#third party script to plot
 thriidii.thriidii(0, 0, fx, fy, fz, fz, fname, 1,0.01, 0.5, 4, "X", "Y", "Z", 0, "green",1)
