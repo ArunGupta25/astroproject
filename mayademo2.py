@@ -1,4 +1,5 @@
 import numpy
+import cleandata
 from mayavi.mlab import *
 
 def test_points3d():
