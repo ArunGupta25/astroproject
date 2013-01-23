@@ -56,6 +56,7 @@ ngdata = numpy.loadtxt('nearbygalaxies1.dat', dtype=ng_dtype)
 #initialize arrays for xyz coordinates and labels
 xyz = numpy.empty((26,3))
 names = []
+fdistance = []
 
 #populate the arrays with xyz coordinates
 for i in range(0,26):
@@ -68,6 +69,8 @@ for i in range(0,26):
 
 	#calculate the distance to the object
 	distance = math.pow(10, ((ngdata[i][4] + 5) / 5))
+
+	fdistance.append(distance)
 
 	help = distance * math.cos(bradians)
 
@@ -94,17 +97,50 @@ fy = numpy.ravel(xyz[:,1])
 
 fz = numpy.ravel(xyz[:,2])
 
+fx[0] = 0
+fy[0] = 0
+fz[0] = 0
 
-
-#s = mlab.points3d(fx, fy, fz, color=(0,1,1), mode='sphere', scale_factor=5000, opacity=0.5, extent=(-220000,220000, -220000,220000, -220000,220000))
+"""
+#3d mayavi plot
 
 s = mlab.points3d(fx[0], fy[0], fz[0], color=(0,1,1), mode='sphere', scale_factor=100)
 
 for i in range(0,26):
 	mlab.points3d(fx[i], fy[i], fz[i], color=(0,1,1), mode='sphere', scale_factor=5000, opacity=0.5)
-	mlab.text3d(fx[i], fy[i], fz[i], fname[i], scale=4000)
+	mlab.text3d(fx[i], fy[i], fz[i], fname[i], scale=5000)
 
 
 axes = mlab.axes(s, extent = (-220000,220000, -220000,220000, -220000,220000), nb_labels=3)
 
 mlab.title("satellites of the milky way galaxy", height=1, size=.5)
+
+
+#scatterplot of apparent magnitudes vs radius
+"""
+
+
+fabsmag = []
+
+for i in range(0,26):
+	fdistance[i] = fdistance[i] / 1000
+	fabsmag.append(ngdata[i][10] - ngdata[i][4])
+
+"""
+fdistance.pop(0)
+fabsmag.pop(0)
+
+p.scatter(fdistance, fabsmag)
+p.gca().invert_yaxis(); p.show()
+
+for i in range(0,25):
+	p.annotate(fname[i+1][0:3], xy=(fdistance[i], fabsmag[i]), xytext=(fdistance[i]+.1*fdistance[i], fabsmag[i] + .1*fabsmag[i]), arrowprops=dict(facecolor='black', shrink=0.01, width=5, headwith=5))
+"""
+
+
+sat = [fname, fx, fy, fz, fabsmag]
+
+
+
+
+
