@@ -34,7 +34,7 @@ def rotatez(angle, xyznamearray):
 		y[i] = x[i]*math.sin(angle) + y[i]*math.cos(angle)
 		z[i] = z[i]
 
-	return [labels, x, y, z]
+	return [labels, x, y, z, xyznamearray[4]]
 
 def rotatex(angle, xyznamearray):
 
@@ -48,7 +48,7 @@ def rotatex(angle, xyznamearray):
 		z[i] = y[i]*math.sin(angle) + z[i]*math.cos(angle)
 		x[i] = x[i]
 
-	return [labels, x, y, z]
+	return [labels, x, y, z, xyznamearray[4]]
 
 def rotatey(angle, xyznamearray):
 
@@ -62,7 +62,7 @@ def rotatey(angle, xyznamearray):
 		x[i] = z[i]*math.sin(angle) + x[i]*math.cos(angle)
 		y[i] = y[i]
 
-	return [labels, x, y, z]
+	return [labels, x, y, z, xyznamearray[4]]
 
 #uses 20 Mpc along the -x axis
 def findtheta(sat):
