@@ -74,14 +74,37 @@ def findtheta(sat):
 	distance = []
 	bvalues = []
 	lvalues = []
+	newx = []
+	newy = []
+	newz = []
 	for i in range(0,26):
 		dval = ((sat[1][i]-20000000)**2 + (sat[2][i]-0)**2 + (sat[3][i]-0)**2)**0.5
 		distance.append(dval)
 
-		newx = sat[1][i] - 20000000
-		newy = sat[2][i]
-		newz = sat[3][i]
+		newx.append(sat[1][i] - 20000000)
+		newy.append(sat[2][i])
+		newz.append(sat[3][i])
 
+	angulardistvalues = []
+	for i in range(0,26):
+		angulardist = math.asin(abs(newz[i]) / 20000000)
+		angulardistvalues.append(angulardist * 3427.74677)
+	angulardistvalues.pop(0)
+	
+	#calculate the distance modulus and apparent magnitude
+	distmodvalues = []
+	appmagvalues = []
+	for i in range(0,25):
+		distmod = 5*math.log10(distance[i+1]) - 5
+		distmodvalues.append(distmod)
+
+		appmag = absmagvalues[i] + distmod
+		appmagvalues.append(appmag)
+
+	return [labels, absmagvalues, distance, angulardistvalues, appmagvalues]
+
+	#complicated code to convert between coordinate systems in order to find the exact angular distance between the center and the satellite. it doesnt work though... should be easy to fix but no point.
+	"""
 		#b in radians
 		b = math.asin(newz/dval)
 		bvalues.append(b)
@@ -89,7 +112,7 @@ def findtheta(sat):
 		#l in radians
 		l = math.acos(newx / (dval * math.cos(b)))
 		lvalues.append(l)
-
+	
 	#find the ra and dec with the new coordinate scheme at 20 Mpc out on the +x axis
 	ravalues = []
 	decvalues = []
@@ -121,7 +144,7 @@ def findtheta(sat):
 		ra2 = ravalues[i] * math.pi / 180
 		angdist = math.sin(dec1)*math.sin(dec2) + math.cos(dec1)*math.cos(dec2)*math.cos(ra1-ra2)
 		#convert from radians to arcminutes
-		angdist = angdist * 3437.74677
+		angdist = angdist 
 		angdistvalues.append(angdist)
 
 	#calculate the distance modulus and apparent magnitude
@@ -134,16 +157,23 @@ def findtheta(sat):
 		appmag = absmagvalues[i] + distmod
 		appmagvalues.append(appmag)
 
-	return [labels, absmagvalues, distance, angdistvalues, appmagvalues]
+	return [labels, absmagvalues, distance, ravalues, decvalues, angdistvalues, appmagvalues]
+	"""
 
 #give a lower bound for apparent mag and list of satellites
 def absmagplot(lbound, thetalist):
-	for i in range(1,26):
+	count = 0
+	for i in range(0,25):
 		if thetalist[4][i] > lbound:
+			count = count + 1
 			p.scatter(thetalist[3][i], thetalist[1][i])
-			p.annotate(thetalist[0][i], xy=(thetalist[3][i], thetalist[1][i]), xytext=(1.2*thetalist[3][i], 1.2*thetalist[1][i]))
+			p.annotate(thetalist[0][i][0:3], xy=(thetalist[3][i], thetalist[1][i]), xytext=(thetalist[3][i]+ -.1*thetalist[3][i], 1.1*thetalist[1][i]), arrowprops=dict(facecolor='black', shrink=0.1, width=1, frac=.01, headwidth=.1))
 
-	p.gca().invert_yaxis(); p.show()
+	p.title("Satellites with an Apparent Magnitude Greater Than " + str(lbound) + " (" + str(count) + ")")
+	p.xlabel("Radius (arcminutes)")
+	p.ylabel("Absolute Magnitude")
+	p.gca().invert_yaxis()
+	p.show()
 
 
 

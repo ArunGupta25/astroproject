@@ -126,21 +126,17 @@ for i in range(0,26):
 	fdistance[i] = fdistance[i] / 1000
 	fabsmag.append(ngdata[i][10] - ngdata[i][4])
 
-"""
+
 fdistance.pop(0)
 fabsmag.pop(0)
 
 p.scatter(fdistance, fabsmag)
 p.gca().invert_yaxis(); p.show()
 
-for i in range(0,25):
-	p.annotate(fname[i+1][0:3], xy=(fdistance[i], fabsmag[i]), xytext=(fdistance[i]+.1*fdistance[i], fabsmag[i] + .1*fabsmag[i]), arrowprops=dict(facecolor='black', shrink=0.01, width=5, headwith=5))
-"""
-
+#have to run this manually for some reason
+for i in [0,1,2,3,7,9,10,11,12,14,15,16,17,18,19,20,22,23]:
+	p.annotate(fname[i+1][0:3], xy=(fdistance[i], fabsmag[i]), xytext=(fdistance[i]+.1*fdistance[i], fabsmag[i] + .1*fabsmag[i]), arrowprops=dict(facecolor='black', shrink=0.1, width=1, frac=.01, headwidth=.1))
 
 sat = [fname, fx, fy, fz, fabsmag]
-
-
-
 
 
