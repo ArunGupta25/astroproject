@@ -4,6 +4,7 @@ import math
 import pylab as p
 import mpl_toolkits.mplot3d.axes3d as p3
 from mayavi import mlab
+import random
 
 def mayaplot(xyznamearray):
 
@@ -161,21 +162,24 @@ def findtheta(sat):
 	"""
 
 #give a lower bound for apparent mag and list of satellites
-def absmagplot(lbound, thetalist):
+def appmagplot(lbound, thetalist):
 	count = 0
 	for i in range(0,25):
-		if thetalist[4][i] > lbound:
+		if thetalist[4][i] < lbound:
 			count = count + 1
-			p.scatter(thetalist[3][i], thetalist[1][i])
-			p.annotate(thetalist[0][i][0:3], xy=(thetalist[3][i], thetalist[1][i]), xytext=(thetalist[3][i]+ -.1*thetalist[3][i], 1.1*thetalist[1][i]), arrowprops=dict(facecolor='black', shrink=0.1, width=1, frac=.01, headwidth=.1))
+			p.scatter(thetalist[3][i], thetalist[4][i])
+			p.annotate(thetalist[0][i+1][0:3], xy=(thetalist[3][i], thetalist[4][i]), xytext=(thetalist[3][i]-1, thetalist[4][i]+.5*random.choice([-1,1])), arrowprops=None)
+		else:
+			p.scatter(thetalist[3][i], thetalist[4][i], marker='^', c='r')
+			p.annotate(thetalist[0][i+1][0:3], xy=(thetalist[3][i], thetalist[4][i]), xytext=(thetalist[3][i]-1, thetalist[4][i]+.5*random.choice([-1,1])), arrowprops=None)
 
-	p.title("Satellites with an Apparent Magnitude Greater Than " + str(lbound) + " (" + str(count) + ")")
+	p.title("Satellites with an Apparent Magnitude Brighter Than " + str(lbound) + " (" + str(count) + ")")
 	p.xlabel("Radius (arcminutes)")
-	p.ylabel("Absolute Magnitude")
+	p.ylabel("Apparent Magnitude")
+	p.text(-4.9, lbound, "Apparent Magnitude Cutoff", weight='bold')
+	p.axhline(y=lbound)
 	p.gca().invert_yaxis()
 	p.show()
-
-
 
 
 

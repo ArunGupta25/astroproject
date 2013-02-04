@@ -114,10 +114,10 @@ for i in range(0,26):
 axes = mlab.axes(s, extent = (-220000,220000, -220000,220000, -220000,220000), nb_labels=3)
 
 mlab.title("satellites of the milky way galaxy", height=1, size=.5)
-
+"""
 
 #scatterplot of apparent magnitudes vs radius
-"""
+
 
 
 fabsmag = []
@@ -130,8 +130,8 @@ for i in range(0,26):
 fdistance.pop(0)
 fabsmag.pop(0)
 
-p.scatter(fdistance, fabsmag)
-p.gca().invert_yaxis(); p.show()
+#p.scatter(fdistance, fabsmag)
+#p.gca().invert_yaxis(); p.show()
 
 #have to run this manually for some reason
 for i in [0,1,2,3,7,9,10,11,12,14,15,16,17,18,19,20,22,23]:
